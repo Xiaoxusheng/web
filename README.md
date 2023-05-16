@@ -29,3 +29,45 @@ code
 301
 401   数据库出错
 500   系统内部错误
+```
+使用了捕获错误的中间件
+```go
+// ErrorHandler 捕获错误中间件
+func ErrorHandler() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		defer func() {
+			if err := recover(); err != nil {
+				// 处理错误
+				c.JSON(http.StatusInternalServerError, gin.H{
+					"error": err,
+					"code":  http.StatusInternalServerError,
+				})
+			}
+		}()
+		c.Next()
+	}
+}
+
+ //当出错时候抛出错误
+	if username == "" || password == "" || email == "" || sex == "" {
+		panic(&utility.ResponseError{Code: 201, Msg: "参数不能为空！"})
+		return
+	}
+  //定义错误结构体
+  type ResponseError struct {
+  	Code int    `json:"code"` //错误码
+  	Msg  string `json:"msg"`  //错误消息
+  }
+<!--参数为空时-->
+  {
+      "code": 500,
+      "error": {
+          "code": 201,
+          "msg": "参数不能为空！"
+      }
+  }
+
+```
+
+
+

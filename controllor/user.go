@@ -14,10 +14,6 @@ func Register(c *gin.Context) {
 	email := c.PostForm("email")
 	sex := c.PostForm("sex")
 	if username == "" || password == "" || email == "" || sex == "" {
-		//c.JSON(http.StatusOK, gin.H{
-		//	"code": 101,
-		//	"msg":  "参数不能为空！",
-		//})
 		panic(&utility.ResponseError{Code: 201, Msg: "参数不能为空！"})
 		return
 	}
@@ -52,6 +48,7 @@ func Register(c *gin.Context) {
 
 }
 
+// Login 登录功能实现一机登录
 func Login(c *gin.Context) {
 	username := c.PostForm("username")
 	password := c.PostForm("password")

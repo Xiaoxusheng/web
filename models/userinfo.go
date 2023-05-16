@@ -8,7 +8,7 @@ import (
 )
 
 type User struct {
-	Id          string `json:"id" form:"id"`
+	Id          int    `json:"id" form:"id"`
 	Indently    string `json:"indently" form:"indently"`
 	Username    string `json:"username" form:"username"  binding:"required,min=3,max=10" `
 	Password    string `json:"password" form:"password"  binding:"required,min=5,max=8" `
