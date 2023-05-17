@@ -19,6 +19,7 @@ Go语言的包管理工具为go mod，以下是常用的go mod指令：
 - 转储模块依赖图：go mod graph
 - 验证依赖项：go mod verify
 - 生成vendor目录：go mod vendor
+- 删除包 go clean -i
 ```
 
 code参数解释
@@ -48,13 +49,13 @@ func ErrorHandler() gin.HandlerFunc {
 	}
 }
 
- //当出错时候抛出错误
-	if username == "" || password == "" || email == "" || sex == "" {
+//当出错时候抛出错误
+if username == "" || password == "" || email == "" || sex == "" {
 		panic(&utility.ResponseError{Code: 201, Msg: "参数不能为空！"})
 		return
 	}
-  //定义错误结构体
-  type ResponseError struct {
+//定义错误结构体
+type ResponseError struct {
   	Code int    `json:"code"` //错误码
   	Msg  string `json:"msg"`  //错误消息
   }

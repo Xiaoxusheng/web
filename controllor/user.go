@@ -8,6 +8,7 @@ import (
 	"web/utility"
 )
 
+// Register 注册
 func Register(c *gin.Context) {
 	username := c.PostForm("username")
 	password := c.PostForm("password")
@@ -53,11 +54,21 @@ func Login(c *gin.Context) {
 	username := c.PostForm("username")
 	password := c.PostForm("password")
 	if username == "" || password == "" {
+		panic(&utility.ResponseError{Code: 101, Msg: "参数不能为空"})
+		return
+	}
+	if err := models.GetUserByUserPwd(username, utility.GetMa5(password)); err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code": 101,
-			"msg":  "参数不能为空！",
+			"code": 1,
+			"msg":  "用户名或密码错误",
 		})
 		return
 	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"code":  200,
+		"msg":   "登陆成功！",
+		"token": utility.GetToken(username),
+	})
 
 }

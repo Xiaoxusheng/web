@@ -2,7 +2,6 @@ package models
 
 import (
 	"fmt"
-	"log"
 	"web/db"
 	"web/utility"
 )
@@ -18,15 +17,7 @@ type User struct {
 	Sex         string `json:"sex" form:"sex" binding:"required"`
 }
 
-func Get() {
-	user := []User{}
-	err := db.DB.Select(&user, "SELECT * FROM userinfo")
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(user)
-}
-
+// 注册
 func GetUsername(username string) bool {
 	user := User{}
 	if err := db.DB.Get(&user, "select * from userinfo where username=?", username); err != nil {
@@ -47,6 +38,15 @@ func GetEmail(email string) bool {
 func InsertUser(user *User) error {
 	if _, err := db.DB.Exec("insert into userinfo(indently,username,password,email,sex,create_time,status) value(?,?,?,?,?,?,?)", user.Indently, user.Username, user.Password, user.Email, user.Status, user.Create_time, user.Status); err != nil {
 		panic(&utility.ResponseError{Code: 401, Msg: err.Error()})
+		return err
+	}
+	return nil
+}
+
+// 登录
+func GetUserByUserPwd(use, pwd string) error {
+	user := User{}
+	if err := db.DB.Get(&user, "select  * from userinfo where username=? and password=?", use, pwd); err != nil {
 		return err
 	}
 	return nil
