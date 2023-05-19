@@ -7,6 +7,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/net/context"
 	"net/http"
+	"strings"
 	"web/db"
 	"web/utility"
 )
@@ -14,17 +15,20 @@ import (
 func ParseToken() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Token from another example.  This token is expired
-		tokenString := c.GetHeader("Authorization")
+		tokenString := strings.Split(c.GetHeader("Authorization"), "Bearer ")[1]
+		fmt.Println(tokenString)
 		ctx := context.Background()
 		user := utility.MyCustomClaims{}
 		token, err := jwt.ParseWithClaims(tokenString, &user, func(token *jwt.Token) (interface{}, error) {
 			return utility.MySigningKey, nil
 		})
+		fmt.Println(user.Username)
 		result, err := db.Rdb.Get(ctx, user.Username).Result()
 		if err != nil {
 			c.Abort()
 			panic(&utility.ResponseError{Code: 301, Msg: "token失效或过期！"})
 		}
+		fmt.Println(result)
 		if result != tokenString {
 			c.JSON(http.StatusOK, gin.H{
 				"code": 1,

@@ -67,8 +67,7 @@ func Login(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"code":  200,
-		"msg":   "登陆成功！",
 		"token": utility.GetToken(username),
+		"msg":   "登陆成功！",
 	})
-
 }

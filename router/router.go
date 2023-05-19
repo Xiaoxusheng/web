@@ -15,7 +15,7 @@ func Router() *gin.Engine {
 	{
 		user.POST("/login", controllor.Login)
 		user.POST("/register", controllor.Register)
-
+		user.GET("/list", middleware.ParseToken(), controllor.BooKList)
 	}
 
 	return r

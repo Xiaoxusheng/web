@@ -63,6 +63,6 @@ func GetToken(username string) string {
 	}
 	fmt.Println(result)
 
-	fmt.Printf("%v %v", ss, err)
+	fmt.Printf("%v ", ss)
 	return ss
 }
