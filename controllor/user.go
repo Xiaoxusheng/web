@@ -8,7 +8,7 @@ import (
 	"web/utility"
 )
 
-// Register 注册
+// TODO Register 注册
 func Register(c *gin.Context) {
 	username := c.PostForm("username")
 	password := c.PostForm("password")
@@ -49,7 +49,7 @@ func Register(c *gin.Context) {
 
 }
 
-// Login 登录功能实现一机登录
+// TODO Login 登录功能实现一机登录
 func Login(c *gin.Context) {
 	username := c.PostForm("username")
 	password := c.PostForm("password")
@@ -70,4 +70,20 @@ func Login(c *gin.Context) {
 		"token": utility.GetToken(username),
 		"msg":   "登陆成功！",
 	})
+}
+
+// TODO  注销账号
+func Logout(c *gin.Context) {
+	username := c.MustGet("username")
+	if username == "" || username == "null" {
+		panic(&utility.ResponseError{Code: 101, Msg: "参数不能为空"})
+	}
+	f := models.Logout(username.(string))
+	if f {
+		c.JSON(http.StatusOK, gin.H{
+			"code": 200,
+			"msg":  "注销成功！",
+		})
+	}
+
 }

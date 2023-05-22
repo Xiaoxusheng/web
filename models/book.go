@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"web/db"
+	"web/utility"
 )
 
 type Book struct {
@@ -14,6 +15,7 @@ type Book struct {
 	Book_time   string `json:"book_time"`
 }
 
+// TODO 书籍列表
 func GetBookList(page, number int) []Book {
 	book := []Book{}
 	err := db.DB.Select(&book, "select * from book limit ?,?", (page-1)*number, number)
@@ -23,4 +25,24 @@ func GetBookList(page, number int) []Book {
 	}
 	fmt.Println(book)
 	return book
+}
+
+// TODO  查询 book_number是否存在
+func GetBookByNumber(bookNumber int) bool {
+	BookNumber := Book{}
+	err := db.DB.Get(&BookNumber, "select * from book where book_number=?", bookNumber)
+	if err != nil {
+		return false
+	}
+	return true
+}
+
+// TODO 修改书籍信息
+func UpdateBook(bookName string, bookStatus, bookNumber int) bool {
+	_, err := db.DB.Exec("update book set book_name=?,book_status=? where book_number=?", bookName, bookStatus, bookNumber)
+	if err != nil {
+		panic(&utility.ResponseError{Code: 401, Msg: err.Error()})
+	}
+	return true
+
 }

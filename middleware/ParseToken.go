@@ -16,13 +16,16 @@ func ParseToken() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Token from another example.  This token is expired
 		tokenString := strings.Split(c.GetHeader("Authorization"), "Bearer ")[1]
-		fmt.Println(tokenString)
+		//fmt.Println(tokenString)
 		ctx := context.Background()
 		user := utility.MyCustomClaims{}
 		token, err := jwt.ParseWithClaims(tokenString, &user, func(token *jwt.Token) (interface{}, error) {
 			return utility.MySigningKey, nil
 		})
-		fmt.Println(user.Username)
+		if user.Username != "" {
+			c.Set("username", user.Username)
+		}
+		fmt.Println("username", user.Username)
 		result, err := db.Rdb.Get(ctx, user.Username).Result()
 		if err != nil {
 			c.Abort()

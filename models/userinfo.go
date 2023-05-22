@@ -35,12 +35,22 @@ func GetEmail(email string) bool {
 	return true
 }
 
+// 插入
 func InsertUser(user *User) error {
 	if _, err := db.DB.Exec("insert into userinfo(indently,username,password,email,sex,create_time,status) value(?,?,?,?,?,?,?)", user.Indently, user.Username, user.Password, user.Email, user.Status, user.Create_time, user.Status); err != nil {
 		panic(&utility.ResponseError{Code: 401, Msg: err.Error()})
 		return err
 	}
 	return nil
+}
+
+// 注销
+func Logout(username string) bool {
+	_, err := db.DB.Exec("update userinfo set states=4 where username=?", username)
+	if err != nil {
+		panic(&utility.ResponseError{Code: 401, Msg: err.Error()})
+	}
+	return true
 }
 
 // 登录
