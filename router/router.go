@@ -22,6 +22,8 @@ func Router() *gin.Engine {
 		user.GET("/list", middleware.ParseToken(), controllor.BooKList)
 		user.POST("/bookUpdate", controllor.BookUpdate)
 		user.GET("/book", middleware.ParseToken(), controllor.TitleList)
+		user.GET("/titleDelete", middleware.ParseToken(), controllor.DeleteTitle)
+		user.POST("/titleUpdate", middleware.ParseToken(), controllor.UpdateTitle)
 
 	}
 

@@ -30,3 +30,28 @@ func GetTitleList(page, titleNumber, bookNumber int) []Title {
 	}
 	return title
 }
+
+func GetTitle(identifying string) bool {
+	title := Title{}
+	err := db.DB.Get(&title, "select * from title where identifying=?", identifying)
+	if err != nil {
+		return false
+	}
+	return true
+}
+
+func DeleteTitle(identifying string) bool {
+	_, err := db.DB.Exec("delete from title where identifying=?", identifying)
+	if err != nil {
+		return false
+	}
+	return true
+}
+
+func UpdateTitle(title, option_a, option_b, option_c, option_d, option_e, option_f, result, identifying string, bookNumber int) bool {
+	_, err := db.DB.Exec("update title set title=?,option_a=?,option_b=?,option_c=?,option_d=?,option_e=?,option_f=?,result=? where identifying=? and bookNumber=?", title, option_a, option_b, option_c, option_d, option_e, option_f, result, identifying, bookNumber)
+	if err != nil {
+		return false
+	}
+	return true
+}
