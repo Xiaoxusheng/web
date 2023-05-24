@@ -12,6 +12,7 @@ import (
 	"web/utility"
 )
 
+// ParseToken TODO 解析token中间件
 func ParseToken() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Token from another example.  This token is expired
