@@ -3,8 +3,11 @@ package middleware
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 	"sync"
 	"time"
+	"web/models"
+	"web/utility"
 )
 
 type TokenBucket struct {
@@ -52,7 +55,7 @@ func (tb *TokenBucket) TakeToken() bool {
 	return false
 }
 
-// TODO IP限流中间件，记录恶意IP
+// LimitIP TODO IP限流中间件
 func LimitIP() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		tb := NewTokenBucket(10, time.Second)
@@ -65,4 +68,36 @@ func LimitIP() gin.HandlerFunc {
 		}
 		c.Next()
 	}
+}
+
+// 记录ip次数
+func IpCount() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		ip := c.RemoteIP()
+		UseAgent := c.GetHeader("use_agent")
+
+		//查询是否为封禁ip
+		b := models.GetIp(ip)
+		if b {
+			c.JSON(http.StatusOK, gin.H{
+				"code": 400,
+				"msg":  "IP访问次数过于频繁，已经封禁",
+			})
+			return
+		}
+		//插入
+		if f := models.InsertIP(&models.Ip{Ip: ip, Time: strconv.FormatInt(time.Now().Unix(), 10), UseAgent: UseAgent}); f != nil {
+			c.Abort()
+			panic(&utility.ResponseError{Code: 401, Msg: f.Error()})
+		}
+
+		//查询次数
+		num := models.GetIpNumber()
+		if num > 60 {
+			//加黑名单
+			models.InsertIpbyBans(ip, strconv.FormatInt(time.Now().Unix(), 10))
+		}
+		c.Next()
+	}
+
 }
