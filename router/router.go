@@ -12,6 +12,9 @@ func Router() *gin.Engine {
 	//错误处理中间件
 	r.Use(middleware.ErrorHandler())
 
+	//限速中间件
+	r.Use(middleware.LimitIP())
+
 	config := cors.DefaultConfig()
 	config.AllowOrigins = []string{"http://localhost:8081"}
 	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
