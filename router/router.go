@@ -16,7 +16,6 @@ func Router() *gin.Engine {
 	r.Use(middleware.LimitIP())
 
 	r.Use(middleware.IpCount())
-
 	//跨域
 	config := cors.DefaultConfig()
 	config.AllowOrigins = []string{"http://localhost:8081"}
@@ -24,7 +23,6 @@ func Router() *gin.Engine {
 	config.AllowHeaders = []string{"Origin", "Content-Type", "Authorization"}
 	config.AllowCredentials = true
 	r.Use(cors.New(config))
-	r.Use(cors.Default())
 
 	//验证网络是否连接
 	r.Use(middleware.GetConnect())

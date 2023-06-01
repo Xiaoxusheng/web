@@ -74,7 +74,7 @@ func LimitIP() gin.HandlerFunc {
 func IpCount() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ip := c.RemoteIP()
-		UseAgent := c.GetHeader("use_agent")
+		UseAgent := c.GetHeader("User-Agent")
 
 		//查询是否为封禁ip
 		b := models.GetIp(ip)

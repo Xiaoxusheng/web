@@ -24,7 +24,7 @@ func GetIpNumber() int {
 }
 
 func InsertIP(ip *Ip) error {
-	_, err := db.DB.Exec("insert ip into (ip,time,use_agent)value (?,?,?)", ip.Ip, ip.Time, ip.UseAgent)
+	_, err := db.DB.Exec("insert  into ip(ip,time,use_agent)value (?,?,?)", ip.Ip, ip.Time, ip.UseAgent)
 	if err != nil {
 		return err
 	}

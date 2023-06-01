@@ -15,7 +15,7 @@ type Book struct {
 	Book_time   string `json:"book_time"`
 }
 
-// TODO 书籍列表
+// GetBookList TODO 书籍列表
 func GetBookList(page, number int) []Book {
 	book := []Book{}
 	err := db.DB.Select(&book, "select * from book limit ?,?", (page-1)*number, number)
@@ -27,7 +27,7 @@ func GetBookList(page, number int) []Book {
 	return book
 }
 
-// TODO  查询 book_number是否存在
+// GetBookByNumber TODO  查询 book_number是否存在
 func GetBookByNumber(bookNumber int) bool {
 	BookNumber := Book{}
 	err := db.DB.Get(&BookNumber, "select * from book where book_number=?", bookNumber)
@@ -37,7 +37,7 @@ func GetBookByNumber(bookNumber int) bool {
 	return true
 }
 
-// TODO 修改书籍信息
+// UpdateBook TODO 修改书籍信息
 func UpdateBook(bookName string, bookStatus, bookNumber int) bool {
 	_, err := db.DB.Exec("update book set book_name=?,book_status=? where book_number=?", bookName, bookStatus, bookNumber)
 	if err != nil {
